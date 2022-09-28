@@ -52,17 +52,18 @@ public class GamePanelS extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		draw(g);
+		revalidate();
 	}
 	
 	public void draw(Graphics g) {
 		
 		if(running)
 		{
-			for (int i = 0; i < SCREEN_HEIGHT/UNIT_SIZE; i++) //for testing purposes to see how big  items in game will be
-			{
-				g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT); // draws vertical lines along game window
-				g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE); // draws horizontal lines across window
-			}
+			// for (int i = 0; i < SCREEN_HEIGHT/UNIT_SIZE; i++) //for testing purposes to see how big  items in game will be
+			// {
+			// 	g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT); // draws vertical lines along game window
+			// 	g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE); // draws horizontal lines across window
+			// }
 			
 			g.setColor(Color.red);
 			g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
@@ -83,19 +84,19 @@ public class GamePanelS extends JPanel implements ActionListener {
 			}
 			
 			//Second player
-			for (int i = 0; i < bodyParts2; i++) 
-			{
-				if (i==0)
-				{
-					g.setColor(Color.yellow);
-					g.fillRect(x2[i], y2[i], UNIT_SIZE, UNIT_SIZE);
-				}
-				else 
-				{
-					g.setColor(Color.orange);
-					g.fillRect(x2[i], y2[i], UNIT_SIZE, UNIT_SIZE);
-				}
-			}
+			// for (int i = 0; i < bodyParts2; i++) 
+			// {
+			// 	if (i==0)
+			// 	{
+			// 		g.setColor(Color.yellow);
+			// 		g.fillRect(x2[i], y2[i], UNIT_SIZE, UNIT_SIZE);
+			// 	}
+			// 	else 
+			// 	{
+			// 		g.setColor(Color.orange);
+			// 		g.fillRect(x2[i], y2[i], UNIT_SIZE, UNIT_SIZE);
+			// 	}
+			// }
 			
 			//Score 
 			g.setColor(Color.white);
@@ -125,11 +126,11 @@ public class GamePanelS extends JPanel implements ActionListener {
 			y[i] = y[i-1];
 		}
 		
-		for(int i = bodyParts2; i > 0; i--)
-		{
-			x2[i] = x2[i-1];
-			y2[i] = y2[i-1];
-		}
+		// for(int i = bodyParts2; i > 0; i--)
+		// {
+		// 	x2[i] = x2[i-1];
+		// 	y2[i] = y2[i-1];
+		// }
 		
 		switch (direction) 
 		{
@@ -147,21 +148,21 @@ public class GamePanelS extends JPanel implements ActionListener {
 			break;
 		}
 		
-		switch (direction2) 
-		{
-		case 'U':
-			y2[0] = y2[0] - UNIT_SIZE;
-			break;
-		case 'D':
-			y2[0] = y2[0] + UNIT_SIZE;
-			break;
-		case 'L':
-			x2[0] = x2[0] - UNIT_SIZE;
-			break;
-		case 'R':
-			x2[0] = x2[0] + UNIT_SIZE;
-			break;
-		}
+		// switch (direction2) 
+		// {
+		// case 'U':
+		// 	y2[0] = y2[0] - UNIT_SIZE;
+		// 	break;
+		// case 'D':
+		// 	y2[0] = y2[0] + UNIT_SIZE;
+		// 	break;
+		// case 'L':
+		// 	x2[0] = x2[0] - UNIT_SIZE;
+		// 	break;
+		// case 'R':
+		// 	x2[0] = x2[0] + UNIT_SIZE;
+		// 	break;
+		// }
 	} 
 	
 	public void checkApple() {
@@ -174,13 +175,13 @@ public class GamePanelS extends JPanel implements ActionListener {
 			
 		}
 		
-		if ((x2[0] == appleX) && (y2[0] == appleY))
-		{
-			bodyParts2++;
-			applesEaten2++;
-			newApple();
+		// if ((x2[0] == appleX) && (y2[0] == appleY))
+		// {
+		// 	bodyParts2++;
+		// 	applesEaten2++;
+		// 	newApple();
 			
-		}
+		// }
 		
 	}
 	
@@ -203,22 +204,22 @@ public class GamePanelS extends JPanel implements ActionListener {
 		//check if head touches bottom border
 		if (y[0] > SCREEN_HEIGHT-UNIT_SIZE) {running = false;}
 		
-		for (int i = bodyParts2; i > 0; i--)
-		{
-			if ((x2[0] == x2[i]) && (y2[0] == y2[i]))
-			{
-				running = false;
-			}
-		}
+		// for (int i = bodyParts2; i > 0; i--)
+		// {
+		// 	if ((x2[0] == x2[i]) && (y2[0] == y2[i]))
+		// 	{
+		// 		running = false;
+		// 	}
+		// }
 		
 		//check if head touches left border
-		if (x2[0] < 0) { running = false;}
-		//checks if head touches right border
-		if (x2[0] > SCREEN_WIDTH-UNIT_SIZE) {running = false;}
-		//check if head touches top border
-		if (y2[0] < 0) {running = false;}
-		//check if head touches bottom border
-		if (y2[0] > SCREEN_HEIGHT-UNIT_SIZE) {running = false;}
+		// if (x2[0] < 0) { running = false;}
+		// //checks if head touches right border
+		// if (x2[0] > SCREEN_WIDTH-UNIT_SIZE) {running = false;}
+		// //check if head touches top border
+		// if (y2[0] < 0) {running = false;}
+		// //check if head touches bottom border
+		// if (y2[0] > SCREEN_HEIGHT-UNIT_SIZE) {running = false;}
 		
 		if (!running) {timer.stop();}
 	}
@@ -279,30 +280,30 @@ public class GamePanelS extends JPanel implements ActionListener {
 					direction = 'D';
 				}
 				break;
-			case KeyEvent.VK_A:
-				if (direction2 != 'R') // to avoid 180 degree turn 
-				{
-					direction2 = 'L';
-				}
-				break;
-			case KeyEvent.VK_D:
-				if (direction2 != 'L') // to avoid 180 degree turn 
-				{
-					direction2 = 'R';
-				}
-				break;
-			case KeyEvent.VK_W:
-				if (direction2 != 'D') // to avoid 180 degree turn 
-				{
-					direction2 = 'U';
-				}
-				break;
-			case KeyEvent.VK_S:
-				if (direction2 != 'U') // to avoid 180 degree turn 
-				{
-					direction2 = 'D';
-				}
-				break;
+			// case KeyEvent.VK_A:
+			// 	if (direction2 != 'R') // to avoid 180 degree turn 
+			// 	{
+			// 		direction2 = 'L';
+			// 	}
+			// 	break;
+			// case KeyEvent.VK_D:
+			// 	if (direction2 != 'L') // to avoid 180 degree turn 
+			// 	{
+			// 		direction2 = 'R';
+			// 	}
+			// 	break;
+			// case KeyEvent.VK_W:
+			// 	if (direction2 != 'D') // to avoid 180 degree turn 
+			// 	{
+			// 		direction2 = 'U';
+			// 	}
+			// 	break;
+			// case KeyEvent.VK_S:
+			// 	if (direction2 != 'U') // to avoid 180 degree turn 
+			// 	{
+			// 		direction2 = 'D';
+			// 	}
+			// 	break;
 				
 			}
 			
