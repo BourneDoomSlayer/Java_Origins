@@ -84,10 +84,21 @@ enum gameState {
 
 	public void drawMenu(Graphics g)
 	{
-		g.setColor(Color.white);
+		//Title
+		g.setColor(Color.green);
 		g.setFont(new Font("Ink Free", Font.ITALIC, 100));
 		FontMetrics metrics = getFontMetrics(g.getFont());
-		g.drawString("MENU", (SCREEN_WIDTH - metrics.stringWidth("MENU"))/2, g.getFont().getSize());
+		g.drawString("SNAKE", (SCREEN_WIDTH - metrics.stringWidth("MENU"))/2, SCREEN_HEIGHT/2 - g.getFont().getSize());
+
+		//Single player
+		g.setColor(Color.red);
+		g.setFont(new Font("Ink Free", Font.ITALIC, 25));
+		g.drawString("Press 1 for Single Snake", (SCREEN_WIDTH/2 - 150), SCREEN_HEIGHT/2 - g.getFont().getSize());
+
+		//Versus 
+		g.setFont(new Font("Ink Free", Font.ITALIC, 25));
+		g.drawString("Press 2 for Snake Royale", (SCREEN_WIDTH/2 - 150), SCREEN_HEIGHT/2 - g.getFont().getSize() + 25);
+
 	}
 
 	public void drawSingle(Graphics g)
@@ -163,16 +174,17 @@ enum gameState {
 		g.setColor(Color.white);
 		g.setFont(new Font("Ink Free", Font.ITALIC, 25));
 		FontMetrics metrics = getFontMetrics(g.getFont());
-		g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: " + applesEaten)) * (2/3), g.getFont().getSize());
+		g.drawString("Score: " + applesEaten, (SCREEN_WIDTH/3 - metrics.stringWidth("Score: " + applesEaten2)), g.getFont().getSize());
 
 		//Second score
 		g.setColor(Color.white);
 		g.setFont(new Font("Ink Free", Font.ITALIC, 25));
 		FontMetrics metrics2 = getFontMetrics(g.getFont());
-		g.drawString("Score2: " + applesEaten2, (SCREEN_WIDTH - metrics2.stringWidth("Score: " + applesEaten2))/3, g.getFont().getSize());
+		g.drawString("Score2: " + applesEaten2, (SCREEN_WIDTH/3) + 2*metrics2.stringWidth("Score: " + applesEaten2), g.getFont().getSize());
 	}
 
 	public void drawGameOver(Graphics g) {
+		
 		// Score
 		g.setColor(Color.white);
 		g.setFont(new Font("Ink Free", Font.ITALIC, 25));
@@ -184,6 +196,11 @@ enum gameState {
 		g.setFont(new Font("Ink Free", Font.BOLD, 75));
 		FontMetrics overMetric = getFontMetrics(g.getFont());
 		g.drawString("Game Over", (SCREEN_WIDTH - overMetric.stringWidth("Game Over"))/2, SCREEN_HEIGHT/2);
+
+		//Reset text
+		g.setColor(Color.red);
+		g.setFont(new Font("Ink Free", Font.ITALIC, 25));
+		g.drawString("Press 3 to reset game", (SCREEN_WIDTH/2 - 125), SCREEN_HEIGHT/2 + g.getFont().getSize() + 20);
 	}
 	
 	
@@ -193,12 +210,13 @@ enum gameState {
 	}
 	
 	public void move() {
-
-		for(int i = bodyParts; i > 0; i--)
+		if (state == gameState.SINGLE || state == gameState.DOUBLE)
 		{
-			x[i] = x[i-1];
-			y[i] = y[i-1];
-		}
+			for(int i = bodyParts; i > 0; i--)
+			{
+				x[i] = x[i-1];
+				y[i] = y[i-1];
+			}
 
 		switch (direction) 
 			{
@@ -215,6 +233,7 @@ enum gameState {
 				x[0] = x[0] + UNIT_SIZE;
 				break;
 			}
+		}
 		
 		if (state == gameState.DOUBLE)
 		{
@@ -244,13 +263,15 @@ enum gameState {
 	
 	public void checkApple() {
 		
-
-		if ((x[0] == appleX) && (y[0] == appleY))
+		if (state == gameState.SINGLE || state == gameState.DOUBLE)
 		{
-			bodyParts++;
-			applesEaten++;
-			newApple();
-			
+			if ((x[0] == appleX) && (y[0] == appleY))
+			{
+				bodyParts++;
+				applesEaten++;
+				newApple();
+				
+			}
 		}
 		
 		if (state == gameState.DOUBLE)
@@ -266,24 +287,26 @@ enum gameState {
 	
 	public void checkCollisions() {
 		
-		// checks if head collides with body
-		for (int i = bodyParts; i > 0; i--)
+		if (state == gameState.SINGLE || state == gameState.DOUBLE)
 		{
-			if ((x[0] == x[i]) && (y[0] == y[i]))
+			// checks if head collides with body
+			for (int i = bodyParts; i > 0; i--)
 			{
-				state = gameState.GAMEOVER;
+				if ((x[0] == x[i]) && (y[0] == y[i]))
+				{
+					state = gameState.GAMEOVER;
+				}
 			}
-		}
-	
-		//check if head touches left border
-		if (x[0] < 0) { state = gameState.GAMEOVER;}
-		//checks if head touches right border
-		if (x[0] > SCREEN_WIDTH-UNIT_SIZE) {state = gameState.GAMEOVER;}
-		//check if head touches top border
-		if (y[0] < 0) {state = gameState.GAMEOVER;}
-		//check if head touches bottom border
-		if (y[0] > SCREEN_HEIGHT-UNIT_SIZE) {state = gameState.GAMEOVER;}
 		
+			//check if head touches left border
+			if (x[0] < 0) { state = gameState.GAMEOVER;}
+			//checks if head touches right border
+			if (x[0] > SCREEN_WIDTH-UNIT_SIZE) {state = gameState.GAMEOVER;}
+			//check if head touches top border
+			if (y[0] < 0) {state = gameState.GAMEOVER;}
+			//check if head touches bottom border
+			if (y[0] > SCREEN_HEIGHT-UNIT_SIZE) {state = gameState.GAMEOVER;}
+		}
 
 		if (state == gameState.DOUBLE)
 		{
@@ -307,8 +330,22 @@ enum gameState {
 		
 		if (state == gameState.GAMEOVER) {timer.stop();}
 	}
-	
-	
+
+	public void resetGame()
+	{
+		state = gameState.MENU;
+		direction = 'R';
+		direction2 = 'R';
+		applesEaten = 0;
+		applesEaten2 = 0;
+		bodyParts = 6;
+		bodyParts2 = 6;
+		x[0] = 0;
+		y[0] = 0;
+		x2[0] = 0;
+		y2[0] = 0;
+		timer.restart();
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -359,6 +396,7 @@ enum gameState {
 					newApple();
 					timer.start();
 				}
+				break;
 			case KeyEvent.VK_2:
 				if(state == gameState.MENU)
 				{
@@ -366,6 +404,13 @@ enum gameState {
 					newApple();
 					timer.start();
 				}
+				break;
+			case KeyEvent.VK_3:
+				if(state == gameState.GAMEOVER)
+				{
+					resetGame();
+				}
+				break;
 			case KeyEvent.VK_A:
 				if (direction2 != 'R') // to avoid 180 degree turn 
 				{
